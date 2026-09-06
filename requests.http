@@ -1,0 +1,23 @@
+### Số dư ban đầu: 1000 / 1000 khi khởi động H2 mới
+GET http://localhost:8080/api/accounts
+
+### Thành công: 900 / 1100
+POST http://localhost:8080/api/payments
+Content-Type: application/json
+
+{"id":"pay-1","from":1,"to":2,"amount":100,"fail":false}
+
+### Lỗi sau debit: rollback, vẫn 900 / 1100
+POST http://localhost:8080/api/payments
+Content-Type: application/json
+
+{"id":"pay-2","from":1,"to":2,"amount":100,"fail":true}
+
+### Gửi lại id đã dùng: từ chối, không trừ tiền lần hai
+POST http://localhost:8080/api/payments
+Content-Type: application/json
+
+{"id":"pay-1","from":1,"to":2,"amount":100,"fail":false}
+
+### Quan sát kết quả
+GET http://localhost:8080/api/accounts
